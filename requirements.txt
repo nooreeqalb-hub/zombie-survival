@@ -1,1 +1,18 @@
+# Zombie Survival - Human vs Block Zombie
+# No heavy dependencies - pure python server
 
+# For accessibility checks (optional)
+# No external lib needed - using stdlib only
+
+# If you want to run with Flask alternative (optional)
+# flask==3.0.0
+
+# For Play Store build (if using Buildozer/Kivy)
+# buildozer==1.5.0
+# kivy==2.3.0
+
+# Current game uses only standard library:
+# - http.server
+# - socketserver
+# - webbrowser
+# So no pip install needed
