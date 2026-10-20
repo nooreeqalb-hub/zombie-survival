@@ -2,34 +2,36 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
 <title>Zombie Survival: Last Hope</title>
 <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <div id="menu-screen">
-<h1>Zombie Survival: Last Hope</h1>
-
-<p>
-Fight endless waves of zombies and survive as long as possible.
-</p>
-
+<h1>🧟 Zombie Survival</h1>
+<p>Fight endless waves!</p>
+<p style="font-size:13px; opacity:0.8;">Phone: Left joystick se chalo, Right SHOOT button se maro</p>
 <button id="start-btn">Start Game</button>
 </div>
 
 <div id="game-screen" style="display:none;">
-<h2>Game Started!</h2>
+<div id="hud">
+<span id="health-display">Health: 100</span>
+<span id="score-display">Score: 0</span>
+<span id="kills-display">Kills: 0</span>
+</div>
 
-<p>Welcome Survivor.</p>
+<canvas id="gameCanvas"></canvas>
 
-<p>Health: 100</p>
-<p>Score: 0</p>
-<p>Kills: 0</p>
+<div id="mobile-controls">
+<div id="joystick-zone">
+<div id="joystick-stick"></div>
+</div>
+<button id="shoot-btn">🔫<br>SHOOT</button>
+</div>
 </div>
 
 <script src="game.js"></script>
-
 </body>
 </html>
