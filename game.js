@@ -13,21 +13,33 @@ const zombieImg = new Image();
 zombieImg.src = 'zombie.png';
 
 let audioCtx;
-function playSound(freq, type, vol, duration){
+function playSound(freq, type, vol, duration, pan = 0){
   try{
     if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const o = audioCtx.createOscillator();
     const g = audioCtx.createGain();
+    const panner = audioCtx.createStereoPanner ? audioCtx.createStereoPanner() : null;
     o.type = type; o.frequency.value = freq;
     g.gain.value = vol;
-    o.connect(g); g.connect(audioCtx.destination);
+    if(panner){
+      panner.pan.value = pan;
+      o.connect(panner); panner.connect(g); g.connect(audioCtx.destination);
+    } else {
+      o.connect(g); g.connect(audioCtx.destination);
+    }
     o.start(); g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
     o.stop(audioCtx.currentTime + duration);
   }catch(e){}
 }
 
+// === V1 LIGHT BLIND SUPPORT ===
+function vibrate(p){ try{ if('vibrate' in navigator) navigator.vibrate(p); }catch(e){} }
+function speak(t){ try{ if('speechSynthesis' in window){ window.speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t); u.rate=1.1; window.speechSynthesis.speak(u);} }catch(e){} }
+
 let player, bullets, zombies, keys, score, health, gameRunning, animId;
 let joyActive=false, joyVec={x:0,y:0};
+let lastDirectionText = ""; // arrow ke liye
+let directionTimer = 0;
 
 function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
 window.addEventListener('resize', resize); resize();
@@ -35,7 +47,7 @@ window.addEventListener('resize', resize); resize();
 function init(){
   player = { x: canvas.width/2, y: canvas.height/2, size: 18, speed: 3.5, angle: 0, type: "Human" };
   bullets=[]; zombies=[]; score=0; health=100;
-  keys={};
+  keys={}; lastDirectionText=""; directionTimer=0;
 }
 
 function spawnZombie(){
@@ -45,13 +57,22 @@ function spawnZombie(){
     return;
   }
   const edge = Math.floor(Math.random()*4);
-  let x,y;
-  if(edge===0){x=Math.random()*canvas.width; y=-30;}
-  if(edge===1){x=canvas.width+30; y=Math.random()*canvas.height;}
-  if(edge===2){x=Math.random()*canvas.width; y=canvas.height+30;}
-  if(edge===3){x=-30; y=Math.random()*canvas.height;}
+  let x,y, dirText, pan;
+  if(edge===0){x=Math.random()*canvas.width; y=-30; dirText="TOP"; pan=0;}
+  if(edge===1){x=canvas.width+30; y=Math.random()*canvas.height; dirText="RIGHT"; pan=0.8;}
+  if(edge===2){x=Math.random()*canvas.width; y=canvas.height+30; dirText="BOTTOM"; pan=0;}
+  if(edge===3){x=-30; y=Math.random()*canvas.height; dirText="LEFT"; pan=-0.8;}
   
   zombies.push({x,y,size:28+Math.random()*8, speed:0.35+Math.random()*0.4+score*0.005});
+  
+  // === BLIND + DIRECTION CUE ===
+  lastDirectionText = dirText;
+  directionTimer = 120; // 2 second tak dikhega
+  playSound(220,'sawtooth',0.35,0.4, pan); // left/right sound
+  vibrate(40);
+  // Har 3rd zombie pe direction bole taaki spam na ho
+  if(zombies.length % 3 === 0) speak("Zombie " + dirText);
+
   setTimeout(spawnZombie, Math.max(800, 2500-score*10));
 }
 
@@ -76,137 +97,15 @@ function shoot(){
   if(!gameRunning) return;
   playSound(600,'square',0.3,0.1);
   bullets.push({x:player.x, y:player.y, vx:Math.cos(player.angle)*10, vy:Math.sin(player.angle)*10});
+  vibrate(20);
 }
 
 function update(){
   handleInput();
+  if(directionTimer>0) directionTimer--;
   bullets.forEach((b,i)=>{
     b.x+=b.vx; b.y+=b.vy;
     if(b.x<0||b.x>canvas.width||b.y<0||b.y>canvas.height) bullets.splice(i,1);
   });
   zombies.forEach((z, zi)=>{
-    const ang=Math.atan2(player.y-z.y, player.x-z.x);
-    z.x+=Math.cos(ang)*z.speed; z.y+=Math.sin(ang)*z.speed;
-    if(Math.hypot(z.x-player.x, z.y-player.y) < z.size+player.size){
-      zombies.splice(zi,1); health-=10; playSound(120,'sawtooth',0.4,0.3);
-      if(health<=0) gameOver();
-    }
-    bullets.forEach((b, bi)=>{
-      if(Math.hypot(z.x-b.x, z.y-b.y) < z.size+8){
-        zombies.splice(zi,1); bullets.splice(bi,1);
-        score+=10; playSound(900,'sine',0.3,0.15);
-      }
-    });
-  });
-  scoreEl.textContent='Score: '+score+' | HUMAN';
-  healthEl.textContent='Health: '+health;
-}
-
-function draw(){
-  ctx.fillStyle='#111'; ctx.fillRect(0,0,canvas.width,canvas.height);
-  
-  // PLAYER - HUMAN with SMG GUN
-  ctx.save(); 
-  ctx.translate(player.x, player.y); 
-  ctx.rotate(player.angle);
-  ctx.fillStyle='#00ffcc'; 
-  ctx.fillRect(-player.size, -player.size/2, player.size*2, player.size);
-  ctx.fillStyle='#555'; 
-  ctx.fillRect(player.size, -4, 18, 8);
-  ctx.fillStyle='#222';
-  ctx.fillRect(player.size+14, -2, 12, 4);
-  ctx.fillStyle='#ffdbac';
-  ctx.beginPath(); ctx.arc(-player.size+5, 0, 7, 0, Math.PI*2); ctx.fill();
-  ctx.restore();
-  
-  // ZOMBIES - IMAGE WALA + FALLBACK
-  zombies.forEach(z=>{
-    if(zombieImg.complete && zombieImg.naturalWidth !== 0){
-      ctx.save();
-      ctx.translate(z.x, z.y);
-      ctx.rotate(Math.atan2(player.y - z.y, player.x - z.x));
-      ctx.drawImage(zombieImg, -z.size, -z.size, z.size*2, z.size*2);
-      ctx.restore();
-    } else {
-      ctx.fillStyle='#ff0000';
-      ctx.beginPath(); ctx.arc(z.x, z.y, z.size, 0, Math.PI*2); ctx.fill();
-    }
-  });
-
-  // BULLETS
-  ctx.fillStyle='#ffff00';
-  bullets.forEach(b=>{
-    ctx.beginPath(); ctx.arc(b.x, b.y, 5, 0, Math.PI*2); ctx.fill();
-  });
-}
-
-function loop(){
-  if(!gameRunning) return;
-  update(); draw();
-  animId = requestAnimationFrame(loop);
-}
-
-// ===== V1 FINAL FIX - PLAY STORE KE LIYE ALERT HATAYA =====
-function gameOver(){
-  gameRunning=false;
-  cancelAnimationFrame(animId);
-  playSound(80,'sawtooth',0.5,0.8);
-  // alert hata ke proper screen
-  if(finalScoreEl) finalScoreEl.textContent = "Score: " + score;
-  if(typeof showScreen === 'function'){
-    showScreen('gameover-screen');
-  } else {
-    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-    document.getElementById('gameover-screen').classList.add('active');
-  }
-}
-
-function startGame(){
-  init();
-  gameRunning=true;
-  resize();
-  spawnZombie();
-  loop();
-  try{ if(audioCtx && audioCtx.state==='suspended') audioCtx.resume(); }catch(e){}
-}
-
-// CONTROLS
-window.addEventListener('keydown', e=>{ keys[e.key]=true; if(e.code==='Space'){ e.preventDefault(); shoot(); } });
-window.addEventListener('keyup', e=>{ keys[e.key]=false; });
-shootBtn.addEventListener('click', shoot);
-shootBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); shoot(); });
-
-// JOYSTICK LOGIC - V1 FINAL
-function getJoyPos(e){
-  const rect = joystickZone.getBoundingClientRect();
-  const t = e.touches ? e.touches[0] : e;
-  return { x: t.clientX - rect.left - rect.width/2, y: t.clientY - rect.top - rect.height/2 };
-}
-joystickZone.addEventListener('touchstart', (e)=>{
-  e.preventDefault(); joyActive=true;
-}, {passive:false});
-joystickZone.addEventListener('touchmove', (e)=>{
-  e.preventDefault();
-  if(!joyActive) return;
-  const pos = getJoyPos(e);
-  const dist = Math.hypot(pos.x, pos.y);
-  const maxDist = 45;
-  let nx = pos.x, ny = pos.y;
-  if(dist > maxDist){ nx = (pos.x/dist)*maxDist; ny = (pos.y/dist)*maxDist; }
-  joystickStick.style.left = (40 + nx) + 'px';
-  joystickStick.style.top = (40 + ny) + 'px';
-  joyVec.x = nx/maxDist; joyVec.y = ny/maxDist;
-}, {passive:false});
-function endJoy(){
-  joyActive=false; joyVec={x:0,y:0};
-  joystickStick.style.left='40px'; joystickStick.style.top='40px';
-}
-joystickZone.addEventListener('touchend', endJoy);
-joystickZone.addEventListener('touchcancel', endJoy);
-
-// START BUTTON (index.html wala showScreen use karega)
-if(startBtn){
-  startBtn.addEventListener('click', ()=>{
-    startGame();
-  });
-}
+    const ang=Math.atan2(player.y-z.y, player
