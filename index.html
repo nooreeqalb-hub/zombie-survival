@@ -1,4 +1,3 @@
-<div id="menu-screen"><div id="menu-screen"><button id="start-btn">Start Game</button>!DOCTYPE html>
 <html lang="en">
 <head>
   <link rel="stylesheet" href="style.css">
@@ -8,7 +7,7 @@
 </head>
 
 <body>
-
+    <div id="menu-screen">
 <h1>Zombie Survival: Last Hope</h1>
 
 <p>
@@ -16,6 +15,18 @@ Fight endless waves of zombies and survive as long as possible.
 </p>
 
 <button>Start Game</button>
-<script src="game.js"></script>
+    </div>
+      <div id="game-screen" style="display:none;">
+        <h2>Game Started!</h2>
+        <div id="hud">
+            <p>❤️ Health: 100</p>
+            <p>⭐ Score: 0</p>
+            <p>💀 Kills: 0</p>
+        </div>
+        <div id="player">
+            👤 Survivor
+        </div>
+    <script src="game.js"></script>
 </body>
 </html>
+ 
