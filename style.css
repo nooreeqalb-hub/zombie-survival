@@ -1,4 +1,4 @@
-    * { margin:0; padding:0; box-sizing:border-box; }
+* { margin:0; padding:0; box-sizing:border-box; }
 
 body {
     background-color: #111111;
@@ -66,7 +66,7 @@ button:hover {
     justify-content: space-between;
     color: white;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 16px;
     z-index: 20;
     pointer-events: none;
 }
@@ -83,33 +83,67 @@ button:hover {
     z-index: 20;
 }
 
+/* ===== JOYSTICK BADA KIYA - 110 se 140px ===== */
 #joystick-zone {
-    width: 110px;
-    height: 110px;
+    width: 140px;
+    height: 140px;
     background: rgba(255,255,255,0.08);
     border-radius: 50%;
     position: relative;
-    border: 2px solid rgba(255,255,255,0.2);
+    border: 2px solid rgba(0,255,0,0.4);
 }
 
 #joystick-stick {
-    width: 40px;
-    height: 40px;
-    background: rgba(255,255,255,0.7);
+    width: 60px;
+    height: 60px;
+    background: rgba(0,255,0,0.8);
     border-radius: 50%;
     position: absolute;
-    left: 35px;
-    top: 35px;
+    left: 40px;
+    top: 40px;
+    box-shadow: 0 0 10px #00ff00;
 }
 
+/* ===== SHOOT BUTTON BADA KIYA - 85 se 120px ===== */
 #shoot-btn {
-    width: 85px;
-    height: 85px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     background: #ff2222;
     color: white;
-    border: 3px solid white;
+    border: 4px solid white;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 18px;
     line-height: 1.1;
+    box-shadow: 0 0 15px rgba(255,0,0,0.6);
 }
+
+/* ===== CHOTA MAP ===== */
+#mini-map {
+    position: fixed;
+    top: 50px;
+    right: 10px;
+    width: 90px;
+    height: 90px;
+    background: rgba(0,0,0,0.7);
+    border: 2px solid #00ff00;
+    border-radius: 8px;
+    z-index: 21;
+}
+
+/* ===== EXTRA INFO SECTIONS FOR PLAY STORE ===== */
+.info-card {
+    background: #1a1a1a;
+    padding: 25px;
+    margin: 20px auto;
+    max-width: 800px;
+    border-radius: 12px;
+    text-align: left;
+    border-left: 4px solid #00ff00;
+}
+.info-card h2 { color: #00ff00; margin-bottom:10px; }
+.info-card a { color: #00ff00; }
+.menu-links { margin-top: 20px; }
+.menu-links a { color: #888; text-decoration: none; margin: 0 8px; }
+.menu-links a:hover { color: #00ff00; }
+footer { padding: 20px; color: #666; background: #000; margin-top:20px; }
