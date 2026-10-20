@@ -5,6 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Zomby Survival - Official</title>
 <link rel="stylesheet" href="style.css">
+<style>
+  body{margin:0;overflow:hidden;background:#0d1117;color:#fff;font-family:Arial,sans-serif;touch-action:none}
+  .screen{display:none;position:fixed;inset:0;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow:auto;background:#0d1117;z-index:1}
+  .screen.active{display:flex}
+  #menu-screen h1{font-size:42px;margin:10px;color:#ff3b3b;text-shadow:0 0 10px red}
+  #menu-screen p{opacity:0.9}
+  button{padding:14px 32px;font-size:18px;font-weight:bold;border:none;border-radius:10px;background:#ff3b3b;color:#fff;cursor:pointer;margin:8px;box-shadow:0 4px 15px rgba(255,59,59,0.4)}
+  button:active{transform:scale(0.95)}
+  .menu-links{margin-top:20px;font-size:14px}
+  .menu-links a{color:#58a6ff;text-decoration:none;margin:0 6px}
+  .info-card{align-items:flex-start;text-align:left;max-width:700px;margin:auto}
+  .info-card h2{color:#ff3b3b;width:100%;text-align:center}
+  .info-card a{color:#58a6ff}
+  .back-btn{background:#21262d !important;font-size:14px !important;padding:8px 16px !important}
+  #game-screen{padding:0;background:#000}
+  #gameCanvas{width:100vw;height:100vh;display:block;background:radial-gradient(#1a2a1a,#000)}
+  #hud{position:fixed;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;font-weight:bold;z-index:5;pointer-events:none}
+  #hud span{background:rgba(0,0,0,0.6);padding:6px 12px;border-radius:20px}
+  #mobile-controls{position:fixed;bottom:0;left:0;right:0;height:140px;display:flex;justify-content:space-between;align-items:flex-end;padding:20px;z-index:5;pointer-events:none}
+  #joystick-zone{width:100px;height:100px;background:rgba(255,255,255,0.15);border-radius:50%;position:relative;pointer-events:auto;border:2px solid rgba(255,255,255,0.2)}
+  #joystick-stick{width:50px;height:50px;background:rgba(255,255,255,0.8);border-radius:50%;position:absolute;left:25px;top:25px;transition:transform 0.05s}
+  #shoot-btn{pointer-events:auto;width:90px;height:90px;border-radius:50%;background:radial-gradient(#ff5555,#cc0000);font-size:16px;box-shadow:0 0 20px rgba(255,0,0,0.5)}
+</style>
 </head>
 <body>
 
@@ -20,7 +43,7 @@
     <a href="#" data-screen="terms">Terms</a> | 
     <a href="#" data-screen="contact">Contact</a>
   </div>
-  <footer style="margin-top:30px; font-size:12px; opacity:0.7;">
+  <footer style="margin-top:30px; font-size:12px; opacity:0.7; text-align:center;">
     <p>© 2026 Zomby Survival | Developed by Rosh Rehman</p>
   </footer>
 </div>
@@ -52,25 +75,23 @@
   <button class="back-btn" data-screen="menu-screen">← Back</button>
   <h2>About This App</h2>
   <p><strong>Zomby Survival</strong> is an immersive, action-packed survival game where you play as a brave Human survivor in a world overrun by zombies.</p>
-  <p>Developed by independent developer <strong>Rosh Rehman</strong>, this game is designed to be enjoyable for everyone, including blind and visually impaired players with accessible controls and audio feedback.</p>
-  <p>Features: Accessible gameplay, smooth joystick controls, human vs zomby survival, and challenging levels. Can you survive the apocalypse?</p>
+  <p>Developed by independent developer <strong>Rosh Rehman</strong>, this game is designed to be enjoyable for everyone, including blind and visually impaired players.</p>
 </section>
 
-<!-- PRIVACY POLICY PAGE - DATE FIXED -->
+<!-- PRIVACY POLICY PAGE -->
 <section id="privacy" class="screen info-card">
   <button class="back-btn" data-screen="menu-screen">← Back</button>
   <h2>Privacy Policy</h2>
   <p><strong>Last Updated: 20/10/2026</strong></p>
-  <p>Zomby Survival respects your privacy. We do not collect, store, or share any personal information, location data, or device information. The game works completely offline and does not require any registration.</p>
-  <p>We do not use third-party analytics or ads that collect user data. If you have any questions, contact us at nooreeqalb@gmail.com</p>
-  <p><a href="privacy-policy.html">View Full Privacy Policy</a></p>
+  <p>Zomby Survival respects your privacy. We do not collect, store, or share any personal information. The game works completely offline and does not require any registration.</p>
+  <p>Contact: nooreeqalb@gmail.com</p>
 </section>
 
 <!-- TERMS PAGE -->
 <section id="terms" class="screen info-card">
   <button class="back-btn" data-screen="menu-screen">← Back</button>
   <h2>Terms & Conditions</h2>
-  <p>By downloading and playing Zomby Survival, you agree to use the game for personal entertainment only. You may not copy, modify, or redistribute the game content without permission. The game is provided "as is" without warranties.</p>
+  <p>By playing Zomby Survival, you agree to use the game for personal entertainment only.</p>
   <p>Effective Date: 20/10/2026</p>
 </section>
 
@@ -78,23 +99,14 @@
 <section id="contact" class="screen info-card">
   <button class="back-btn" data-screen="menu-screen">← Back</button>
   <h2>Contact Us</h2>
-  <p>We value your feedback, suggestions, and support!</p>
   <p><strong>Email:</strong> nooreeqalb@gmail.com</p>
   <p><strong>Facebook:</strong> <a href="https://www.facebook.com/share/1XHQc6TCP9/" target="_blank">facebook.com/Rosh</a></p>
   <p><strong>Instagram:</strong> <a href="https://www.instagram.com/rosh_rehman" target="_blank">@rosh_rehman</a></p>
-  <p><strong>Telegram:</strong> <a href="https://t.me/rosh_rehman" target="_blank">t.me/rosh_rehman</a></p>
-  <p><strong>YouTube:</strong> <a href="https://m.youtube.com/@noor-ehidaayat97" target="_blank">Noor-e-Hidaayat</a></p>
-  <p><strong>Portfolio:</strong> <a href="https://roshnirehman.github.io/Rosh/" target="_blank">roshnirehman.github.io/Rosh</a></p>
-  <hr>
-  <h3>Support Our Project 💛</h3>
-  <p>Zomby Survival is an independent project. If you love our work, please support us:</p>
-  <p><strong>UPI ID: rehmanrosh@oksbi</strong></p>
-  <p>Thank you for being part of our journey! Created with dedication by Rosh Rehman.</p>
+  <p><strong>Support UPI:</strong> rehmanrosh@oksbi</p>
 </section>
 
-<script src="game.js"></script>
 <script>
-// APP LIKE NAVIGATION
+// NAVIGATION
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -106,5 +118,6 @@ document.querySelectorAll('[data-screen]').forEach(link=>{
   });
 });
 </script>
+<script src="game.js"></script>
 </body>
 </html>
