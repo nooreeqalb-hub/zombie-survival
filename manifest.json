@@ -1,1 +1,15 @@
-    
+{
+  "name": "Zomby Survival",
+  "short_name": "Zomby Survival",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#00c851",
+  "icons": [
+    {
+      "src": "player.jpeg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
