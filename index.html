@@ -1,123 +1,130 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Zomby Survival - Official</title>
-<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Zomby Survival</title>
 <style>
-  body{margin:0;overflow:hidden;background:#0d1117;color:#fff;font-family:Arial,sans-serif;touch-action:none}
-  .screen{display:none;position:fixed;inset:0;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow:auto;background:#0d1117;z-index:1}
-  .screen.active{display:flex}
-  #menu-screen h1{font-size:42px;margin:10px;color:#ff3b3b;text-shadow:0 0 10px red}
-  #menu-screen p{opacity:0.9}
-  button{padding:14px 32px;font-size:18px;font-weight:bold;border:none;border-radius:10px;background:#ff3b3b;color:#fff;cursor:pointer;margin:8px;box-shadow:0 4px 15px rgba(255,59,59,0.4)}
-  button:active{transform:scale(0.95)}
-  .menu-links{margin-top:20px;font-size:14px}
-  .menu-links a{color:#58a6ff;text-decoration:none;margin:0 6px}
-  .info-card{align-items:flex-start;text-align:left;max-width:700px;margin:auto}
-  .info-card h2{color:#ff3b3b;width:100%;text-align:center}
-  .info-card a{color:#58a6ff}
-  .back-btn{background:#21262d !important;font-size:14px !important;padding:8px 16px !important}
-  #game-screen{padding:0;background:#000}
-  #gameCanvas{width:100vw;height:100vh;display:block;background:radial-gradient(#1a2a1a,#000)}
-  #hud{position:fixed;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;font-weight:bold;z-index:5;pointer-events:none}
-  #hud span{background:rgba(0,0,0,0.6);padding:6px 12px;border-radius:20px}
-  #mobile-controls{position:fixed;bottom:0;left:0;right:0;height:140px;display:flex;justify-content:space-between;align-items:flex-end;padding:20px;z-index:5;pointer-events:none}
-  #joystick-zone{width:100px;height:100px;background:rgba(255,255,255,0.15);border-radius:50%;position:relative;pointer-events:auto;border:2px solid rgba(255,255,255,0.2)}
-  #joystick-stick{width:50px;height:50px;background:rgba(255,255,255,0.8);border-radius:50%;position:absolute;left:25px;top:25px;transition:transform 0.05s}
-  #shoot-btn{pointer-events:auto;width:90px;height:90px;border-radius:50%;background:radial-gradient(#ff5555,#cc0000);font-size:16px;box-shadow:0 0 20px rgba(255,0,0,0.5)}
+body{margin:0;background:#0d1117;color:#fff;font-family:sans-serif;overflow:hidden}
+.screen{display:none;position:fixed;inset:0;justify-content:center;align-items:center;flex-direction:column;background:#0d1117;z-index:10}
+.screen.active{display:flex}
+#game-screen{padding:0;background:#000}
+canvas{width:100vw;height:100vh;display:block}
+#hud{position:fixed;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;z-index:20}
+#hud span{background:rgba(0,0,0,.7);padding:6px 12px;border-radius:20px}
+#controls{position:fixed;bottom:20px;left:20px;right:20px;display:flex;justify-content:space-between;z-index:20}
+#joy{width:100px;height:100px;background:rgba(255,255,255,.2);border-radius:50%;position:relative}
+#stick{width:50px;height:50px;background:#fff;border-radius:50%;position:absolute;left:25px;top:25px}
+button{padding:15px 35px;font-size:20px;background:#ff3333;color:#fff;border:none;border-radius:12px;font-weight:bold}
+#shoot{width:90px;height:90px;border-radius:50%;background:#ff0000}
 </style>
 </head>
 <body>
-
-<!-- HOME SCREEN -->
 <div id="menu-screen" class="screen active">
-  <h1>🧟 ZOMBY SURVIVAL</h1>
-  <p>Survive as a Human against Zombies!</p>
-  <button id="start-btn">START GAME</button>
-  
-  <div class="menu-links">
-    <a href="#" data-screen="about">About</a> | 
-    <a href="#" data-screen="privacy">Privacy Policy</a> | 
-    <a href="#" data-screen="terms">Terms</a> | 
-    <a href="#" data-screen="contact">Contact</a>
-  </div>
-  <footer style="margin-top:30px; font-size:12px; opacity:0.7; text-align:center;">
-    <p>© 2026 Zomby Survival | Developed by Rosh Rehman</p>
-  </footer>
+<h1>🧟 ZOMBY SURVIVAL</h1>
+<button id="start-btn">START GAME</button>
+<p style="margin-top:20px;opacity:.6">© 2026 Rosh Rehman</p>
 </div>
-
-<!-- GAME SCREEN -->
 <div id="game-screen" class="screen">
-  <canvas id="gameCanvas"></canvas>
-  <div id="hud">
-    <span id="score">Score: 0</span>
-    <span id="health">Health: 100</span>
-    <span id="player-type">Player: Human</span>
-  </div>
-  <div id="mobile-controls">
-    <div id="joystick-zone"><div id="joystick-stick"></div></div>
-    <button id="shoot-btn">SHOOT</button>
-  </div>
+<canvas id="gameCanvas"></canvas>
+<div id="hud"><span id="score">Score: 0</span><span id="health">Health: 100</span></div>
+<div id="controls"><div id="joy"><div id="stick"></div></div><button id="shoot">SHOOT</button></div>
 </div>
-
-<!-- GAME OVER SCREEN -->
 <div id="gameover-screen" class="screen">
-  <h1>GAME OVER</h1>
-  <h2 id="final-score">Score: 0</h2>
-  <button id="restart-btn">PLAY AGAIN</button>
-  <button class="back-btn" data-screen="menu-screen">HOME</button>
+<h1>GAME OVER</h1><h2 id="final-score">0</h2>
+<button id="restart-btn">PLAY AGAIN</button>
+<button onclick="location.reload()">HOME</button>
 </div>
-
-<!-- ABOUT PAGE -->
-<section id="about" class="screen info-card">
-  <button class="back-btn" data-screen="menu-screen">← Back</button>
-  <h2>About This App</h2>
-  <p><strong>Zomby Survival</strong> is an immersive, action-packed survival game where you play as a brave Human survivor in a world overrun by zombies.</p>
-  <p>Developed by independent developer <strong>Rosh Rehman</strong>, this game is designed to be enjoyable for everyone, including blind and visually impaired players.</p>
-</section>
-
-<!-- PRIVACY POLICY PAGE -->
-<section id="privacy" class="screen info-card">
-  <button class="back-btn" data-screen="menu-screen">← Back</button>
-  <h2>Privacy Policy</h2>
-  <p><strong>Last Updated: 20/10/2026</strong></p>
-  <p>Zomby Survival respects your privacy. We do not collect, store, or share any personal information. The game works completely offline and does not require any registration.</p>
-  <p>Contact: nooreeqalb@gmail.com</p>
-</section>
-
-<!-- TERMS PAGE -->
-<section id="terms" class="screen info-card">
-  <button class="back-btn" data-screen="menu-screen">← Back</button>
-  <h2>Terms & Conditions</h2>
-  <p>By playing Zomby Survival, you agree to use the game for personal entertainment only.</p>
-  <p>Effective Date: 20/10/2026</p>
-</section>
-
-<!-- CONTACT PAGE -->
-<section id="contact" class="screen info-card">
-  <button class="back-btn" data-screen="menu-screen">← Back</button>
-  <h2>Contact Us</h2>
-  <p><strong>Email:</strong> nooreeqalb@gmail.com</p>
-  <p><strong>Facebook:</strong> <a href="https://www.facebook.com/share/1XHQc6TCP9/" target="_blank">facebook.com/Rosh</a></p>
-  <p><strong>Instagram:</strong> <a href="https://www.instagram.com/rosh_rehman" target="_blank">@rosh_rehman</a></p>
-  <p><strong>Support UPI:</strong> rehmanrosh@oksbi</p>
-</section>
-
 <script>
-// NAVIGATION
-function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+const canvas=document.getElementById('gameCanvas');
+const ctx=canvas.getContext('2d');
+const scoreEl=document.getElementById('score');
+const healthEl=document.getElementById('health');
+const finalScoreEl=document.getElementById('final-score');
+const zImg=new Image(); zImg.src='zomby.jpeg';
+const pImg=new Image(); pImg.src='player.jpeg';
+let player,bullets=[],zombies=[],keys={},score=0,health=100,running=false,joy={x:0,y:0},joyAct=false;
+
+function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}
+window.addEventListener('resize',resize);resize();
+
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+
+function init(){
+player={x:canvas.width/2,y:canvas.height/2,size:22,speed:4,angle:0};
+bullets=[];zombies=[];score=0;health=100;
+scoreEl.textContent='Score: 0';healthEl.textContent='Health: 100';
 }
-document.querySelectorAll('[data-screen]').forEach(link=>{
-  link.addEventListener('click', (e)=>{
-    e.preventDefault();
-    showScreen(link.getAttribute('data-screen'));
-  });
+function spawn(){
+if(!running) return;
+let e=Math.floor(Math.random()*4),x,y;
+if(e==0){x=Math.random()*canvas.width;y=-40}
+else if(e==1){x=canvas.width+40;y=Math.random()*canvas.height}
+else if(e==2){x=Math.random()*canvas.width;y=canvas.height+40}
+else{x=-40;y=Math.random()*canvas.height}
+zombies.push({x,y,size:28,speed:0.9+Math.random()});
+setTimeout(spawn,1700);
+}
+function shoot(){
+if(!running) return;
+bullets.push({x:player.x,y:player.y,vx:Math.cos(player.angle)*11,vy:Math.sin(player.angle)*11});
+}
+function update(){
+let mx=0,my=0;
+if(keys['w']||keys['ArrowUp'])my=-1;
+if(keys['s']||keys['ArrowDown'])my=1;
+if(keys['a']||keys['ArrowLeft'])mx=-1;
+if(keys['d']||keys['ArrowRight'])mx=1;
+if(joyAct){mx=joy.x;my=joy.y}
+if(mx||my){
+let l=Math.hypot(mx,my)||1;
+player.x+=(mx/l)*player.speed;
+player.y+=(my/l)*player.speed;
+player.angle=Math.atan2(my,mx);
+}
+player.x=Math.max(0,Math.min(canvas.width,player.x));
+player.y=Math.max(0,Math.min(canvas.height,player.y));
+for(let i=bullets.length-1;i>=0;i--){bullets[i].x+=bullets[i].vx;bullets[i].y+=bullets[i].vy;if(bullets[i].x<0||bullets[i].x>canvas.width||bullets[i].y<0||bullets[i].y>canvas.height)bullets.splice(i,1);}
+for(let zi=zombies.length-1;zi>=0;zi--){
+let z=zombies[zi];
+let a=Math.atan2(player.y-z.y,player.x-z.x);
+z.x+=Math.cos(a)*z.speed;z.y+=Math.sin(a)*z.speed;
+if(Math.hypot(player.x-z.x,player.y-z.y)<35){zombies.splice(zi,1);health-=15;healthEl.textContent='Health: '+health;if(health<=0){running=false;finalScoreEl.textContent='Score: '+score;show('gameover-screen');}continue;}
+for(let bi=bullets.length-1;bi>=0;bi--){if(Math.hypot(bullets[bi].x-z.x,bullets[bi].y-z.y)<30){zombies.splice(zi,1);bullets.splice(bi,1);score+=10;scoreEl.textContent='Score: '+score;break;}}
+}
+}
+function draw(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+ctx.save();ctx.translate(player.x,player.y);ctx.rotate(player.angle);
+if(pImg.complete&&pImg.naturalWidth>0){ctx.drawImage(pImg,-player.size,-player.size,player.size*2.2,player.size*2.2)}
+else{ctx.fillStyle='#00ff88';ctx.beginPath();ctx.arc(0,0,player.size,0,Math.PI*2);ctx.fill();}
+ctx.restore();
+ctx.fillStyle='yellow';
+bullets.forEach(b=>{ctx.beginPath();ctx.arc(b.x,b.y,5,0,Math.PI*2);ctx.fill();});
+zombies.forEach(z=>{
+if(zImg.complete&&zImg.naturalWidth>0){ctx.drawImage(zImg,z.x-z.size,z.y-z.size,z.size*2,z.size*2)}
+else{ctx.fillStyle='red';ctx.beginPath();ctx.arc(z.x,z.y,z.size,0,Math.PI*2);ctx.fill();}
 });
+}
+function loop(){if(!running)return;update();draw();requestAnimationFrame(loop);}
+function startGame(){init();show('game-screen');resize();running=true;spawn();loop();}
+document.getElementById('start-btn').addEventListener('click',startGame);
+document.getElementById('restart-btn').addEventListener('click',startGame);
+window.addEventListener('keydown',e=>{keys[e.key]=true;if(e.code==='Space'){e.preventDefault();shoot();}});
+window.addEventListener('keyup',e=>{keys[e.key]=false;});
+const joyZone=document.getElementById('joy');
+joyZone.addEventListener('touchstart',e=>{joyAct=true;moveJoy(e.touches[0].clientX,e.touches[0].clientY)});
+joyZone.addEventListener('touchmove',e=>{e.preventDefault();if(joyAct)moveJoy(e.touches[0].clientX,e.touches[0].clientY)},{passive:false});
+joyZone.addEventListener('touchend',()=>{joyAct=false;joy={x:0,y:0};document.getElementById('stick').style.transform='translate(0,0)'});
+function moveJoy(cx,cy){
+const r=joyZone.getBoundingClientRect();
+let dx=cx-(r.left+r.width/2),dy=cy-(r.top+r.height/2);
+let d=Math.min(35,Math.hypot(dx,dy)),a=Math.atan2(dy,dx);
+joy.x=Math.cos(a)*d/35;joy.y=Math.sin(a)*d/35;
+document.getElementById('stick').style.transform=`translate(${Math.cos(a)*d}px,${Math.sin(a)*d}px)`;
+}
+document.getElementById('shoot').addEventListener('touchstart',e=>{e.preventDefault();shoot();});
+document.getElementById('shoot').addEventListener('click',shoot);
 </script>
-<script src="game.js"></script>
 </body>
 </html>
