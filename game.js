@@ -1,18 +1,16 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const startBtn = document.getElementById('start-btn');
-const menuScreen = document.getElementById('menu-screen');
-const gameScreen = document.getElementById('game-screen');
 const scoreEl = document.getElementById('score');
 const healthEl = document.getElementById('health');
 const joystickZone = document.getElementById('joystick-zone');
 const joystickStick = document.getElementById('joystick-stick');
 const shootBtn = document.getElementById('shoot-btn');
+const finalScoreEl = document.getElementById('final-score');
 
-// --- NEW: Zombie Image ---
+// --- Zombie Image ---
 const zombieImg = new Image();
 zombieImg.src = 'zombie.png';
-// ------------------------
 
 let audioCtx;
 function playSound(freq, type, vol, duration){
@@ -121,9 +119,94 @@ function draw(){
   ctx.beginPath(); ctx.arc(-player.size+5, 0, 7, 0, Math.PI*2); ctx.fill();
   ctx.restore();
   
-  // ZOMBIES - NEW IMAGE WALA
+  // ZOMBIES - IMAGE WALA + FALLBACK
   zombies.forEach(z=>{
     if(zombieImg.complete && zombieImg.naturalWidth !== 0){
       ctx.save();
       ctx.translate(z.x, z.y);
-      ctx.rotate(Math.atan2(player.y
+      ctx.rotate(Math.atan2(player.y - z.y, player.x - z.x));
+      ctx.drawImage(zombieImg, -z.size, -z.size, z.size*2, z.size*2);
+      ctx.restore();
+    } else {
+      ctx.fillStyle='#ff0000';
+      ctx.beginPath(); ctx.arc(z.x, z.y, z.size, 0, Math.PI*2); ctx.fill();
+    }
+  });
+
+  // BULLETS
+  ctx.fillStyle='#ffff00';
+  bullets.forEach(b=>{
+    ctx.beginPath(); ctx.arc(b.x, b.y, 5, 0, Math.PI*2); ctx.fill();
+  });
+}
+
+function loop(){
+  if(!gameRunning) return;
+  update(); draw();
+  animId = requestAnimationFrame(loop);
+}
+
+// ===== V1 FINAL FIX - PLAY STORE KE LIYE ALERT HATAYA =====
+function gameOver(){
+  gameRunning=false;
+  cancelAnimationFrame(animId);
+  playSound(80,'sawtooth',0.5,0.8);
+  // alert hata ke proper screen
+  if(finalScoreEl) finalScoreEl.textContent = "Score: " + score;
+  if(typeof showScreen === 'function'){
+    showScreen('gameover-screen');
+  } else {
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById('gameover-screen').classList.add('active');
+  }
+}
+
+function startGame(){
+  init();
+  gameRunning=true;
+  resize();
+  spawnZombie();
+  loop();
+  try{ if(audioCtx && audioCtx.state==='suspended') audioCtx.resume(); }catch(e){}
+}
+
+// CONTROLS
+window.addEventListener('keydown', e=>{ keys[e.key]=true; if(e.code==='Space'){ e.preventDefault(); shoot(); } });
+window.addEventListener('keyup', e=>{ keys[e.key]=false; });
+shootBtn.addEventListener('click', shoot);
+shootBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); shoot(); });
+
+// JOYSTICK LOGIC - V1 FINAL
+function getJoyPos(e){
+  const rect = joystickZone.getBoundingClientRect();
+  const t = e.touches ? e.touches[0] : e;
+  return { x: t.clientX - rect.left - rect.width/2, y: t.clientY - rect.top - rect.height/2 };
+}
+joystickZone.addEventListener('touchstart', (e)=>{
+  e.preventDefault(); joyActive=true;
+}, {passive:false});
+joystickZone.addEventListener('touchmove', (e)=>{
+  e.preventDefault();
+  if(!joyActive) return;
+  const pos = getJoyPos(e);
+  const dist = Math.hypot(pos.x, pos.y);
+  const maxDist = 45;
+  let nx = pos.x, ny = pos.y;
+  if(dist > maxDist){ nx = (pos.x/dist)*maxDist; ny = (pos.y/dist)*maxDist; }
+  joystickStick.style.left = (40 + nx) + 'px';
+  joystickStick.style.top = (40 + ny) + 'px';
+  joyVec.x = nx/maxDist; joyVec.y = ny/maxDist;
+}, {passive:false});
+function endJoy(){
+  joyActive=false; joyVec={x:0,y:0};
+  joystickStick.style.left='40px'; joystickStick.style.top='40px';
+}
+joystickZone.addEventListener('touchend', endJoy);
+joystickZone.addEventListener('touchcancel', endJoy);
+
+// START BUTTON (index.html wala showScreen use karega)
+if(startBtn){
+  startBtn.addEventListener('click', ()=>{
+    startGame();
+  });
+}
