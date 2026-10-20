@@ -2,34 +2,27 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-<title>Zombie Survival: Last Hope</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Zombie Survival</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div id="menu-screen">
-<h1>🧟 Zombie Survival</h1>
-<p>Fight endless waves!</p>
-<p style="font-size:13px; opacity:0.8;">Phone: Left joystick se chalo, Right SHOOT button se maro</p>
-<button id="start-btn">Start Game</button>
+  <h1>ZOMBIE SURVIVAL</h1>
+  <button id="start-btn">START GAME</button>
 </div>
 
 <div id="game-screen" style="display:none;">
-<div id="hud">
-<span id="health-display">Health: 100</span>
-<span id="score-display">Score: 0</span>
-<span id="kills-display">Kills: 0</span>
-</div>
-
-<canvas id="gameCanvas"></canvas>
-
-<div id="mobile-controls">
-<div id="joystick-zone">
-<div id="joystick-stick"></div>
-</div>
-<button id="shoot-btn">🔫<br>SHOOT</button>
-</div>
+  <canvas id="gameCanvas"></canvas>
+  <div id="hud">
+    <span id="score">Score: 0</span>
+    <span id="health">Health: 100</span>
+  </div>
+  <div id="mobile-controls">
+    <div id="joystick-zone"><div id="joystick-stick"></div></div>
+    <button id="shoot-btn">SHOOT</button>
+  </div>
 </div>
 
 <script src="game.js"></script>
