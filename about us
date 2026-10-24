@@ -1,1 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Developer - Rosh Rehman</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #080808; color: #e0e0e0; padding: 20px; line-height: 1.9; }
+        .container { max-width: 800px; margin: auto; background: #151515; padding: 40px; border-radius: 18px; border: 1px solid #222; }
+        h1 { color: #ffffff; text-align: center; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #888; margin-bottom: 30px; letter-spacing: 2px; }
+        h2 { color: #ff3b3b; }
+        .quote { background: #1e1e1e; padding: 20px; border-left: 4px solid #ff3b3b; border-radius: 6px; font-style: italic; margin: 25px 0; }
+        .thanks-box { background: #1a1a1a; padding: 20px; border-radius: 10px; border: 1px dashed #ff3b3b; margin-top: 25px; }
+        a { color: #ff3b3b; text-decoration: none; display: inline-block; margin-top: 30px; padding: 10px 22px; border: 1px solid #ff3b3b; border-radius: 8px; }
+        a:hover { background: #ff3b3b; color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ROSH REHMAN</h1>
+        <p class="subtitle">GAME DEVELOPER | CREATOR OF ZOMBY</p>
 
+        <h2>About Me</h2>
+        <p>
+            Hello, I am <strong>Rosh Rehman</strong>. I am an independent game/App developer with a deep passion for creating interactive experiences and telling stories through games.
+        </p>
+
+        <div class="quote">
+            "I started developing this journey at a very challenging phase of my life, while I was gradually losing my eyesight. Being visually impaired made things difficult, but it could not stop my passion for creation. For me, developing is not just about coding, it's about proving that vision comes from determination, not just eyesight."
+        </div>
+
+        <p>
+            I believe that limitations are only in the mind. My goal is to continue learning, building, and inspiring others who face similar challenges to never give up on their dreams.
+        </p>
+
+        <div class="thanks-box">
+            <h2>Special Thanks</h2>
+            <p>
+                I want to express my sincere and heartfelt gratitude to <strong>Moht Taiyab</strong>.
+            </p>
+            <p>
+                Thank you for giving me the idea to create something like this and for motivating me throughout this journey. Your support, guidance and belief in me means everything to me.
+            </p>
+        </div>
+
+        <center><a href="index.html">← Back to Home</a></center>
+    </div>
+</body>
+</html>
