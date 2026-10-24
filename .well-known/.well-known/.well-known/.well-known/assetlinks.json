@@ -1,0 +1,9 @@
+    [{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.nooreeqalb_hub.twa",
+        "sha256_cert_fingerprints": ["5B:29:32:25:CE:2A:09:04:99:F8:D7:CB:19:24:DF:1D:54:12:24:61:43:6D:50:E0:58:0C:BA:87:8F:ED:8A:D8"]
+      }
+    }]
+
