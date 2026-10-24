@@ -1,1 +1,45 @@
-  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About - Zomby Game</title>
+<style>
+body{font-family:Arial,sans-serif;background:#0f0f0f;color:#fff;margin:0;padding:20px;line-height:1.6}
+.container{max-width:800px;margin:auto;background:#1a1a1a;padding:25px;border-radius:12px}
+h1{color:#ff4444;text-align:center}
+h2{color:#ffcc00;margin-top:25px}
+a{color:#00d9ff;text-decoration:none}
+.btn{display:block;background:#ff4444;color:#fff;text-align:center;padding:12px;border-radius:8px;margin-top:20px;text-decoration:none;font-weight:bold}
+</style>
+</head>
+<body>
+<div class="container">
+<h1> About Zomby survival  Game</h1>
+
+<p><b>Zomby survival </b> is a thrilling survival action game where you fight against hordes of zombies and try to stay alive as long as possible.</p>
+
+<h2>🎮 How to Play</h2>
+<p>Use joystick to move, tap to shoot, collect ammo and health packs to survive longer. Kill more zombies to get high score!</p>
+
+<h2>✨ Features</h2>
+<p>
+- Smooth controls<br>
+- Endless zombie waves<br>
+- Cool weapons and power-ups<br>
+- Offline play - no internet needed<br>
+- Free to play
+</p>
+
+<h2>📧 Contact Us</h2>
+<p>If you have any feedback or issue, contact us at: <br>
+<b>your-email@gmail.com</b></p>
+
+<h2>🔒 Privacy</h2>
+<p>We do not collect any personal data. Game is 100% safe for all users.</p>
+
+<a href="index.html" class="btn">Back to Game</a>
+
+</div>
+</body>
+</html>
